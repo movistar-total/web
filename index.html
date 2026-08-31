@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Movistar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --movistar-blue: #019df4;
+      --movistar-blue-dark: #0b2739;
+      --text-black: #1a1a1a;
+      --text-gray: #8a8a8a;
+      --bg-gray: #e9e9e9;
+      --green: #2e7d32;
+      --green-bg: #e8f5e9;
+      --nav-height: 64px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-gray);
+      color: var(--text-black);
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 12px);
+      min-height: 100dvh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    /* ===== HERO / BANNER ===== */
+    .hero {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+    }
+
+    .hero-banner {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0 0 auto 0;
+      z-index: 2;
+      line-height: normal;
+      padding: 14px 16px 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(8, 28, 48, 0.55) 0%,
+        rgba(8, 28, 48, 0.2) 70%,
+        transparent 100%
+      );
+      padding-bottom: 18px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .menu-btn span {
+      display: block;
+      height: 2px;
+      width: 22px;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    .greeting {
+      flex: 1;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+    }
+
+    /* Plan selector over banner */
+    .plan-selector-wrap {
+      position: relative;
+      margin-top: 14px;
+    }
+
+    .plan-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+      width: 100%;
+      text-align: left;
+    }
+
+    .plan-selector .gift-icon {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      color: var(--movistar-blue);
+    }
+
+    .plan-selector .plan-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .plan-selector .plan-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-black);
+      line-height: 1.2;
+    }
+
+    .plan-selector .plan-sub {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+
+    .plan-selector .chevron {
+      width: 20px;
+      height: 20px;
+      color: var(--movistar-blue);
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .plan-selector-wrap.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .plan-dropdown {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .plan-selector-wrap.open .plan-dropdown {
+      display: block;
+    }
+
+    .plan-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .plan-dropdown-item:active {
+      background: #f5f5f5;
+    }
+
+    /* ===== HAMBURGER MENU ===== */
+    .menu-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 40;
+    }
+
+    .menu-backdrop.show {
+      display: block;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: min(78vw, 300px);
+      background: #fff;
+      z-index: 50;
+      transform: translateX(-105%);
+      transition: transform 0.25s ease;
+      padding: 28px 0 24px;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .side-menu.open {
+      transform: translateX(0);
+    }
+
+    .side-menu h2 {
+      font-size: 18px;
+      font-weight: 700;
+      padding: 0 24px 18px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 8px;
+    }
+
+    .side-menu button.menu-link {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-black);
+    }
+
+    .side-menu button.menu-link:active {
+      background: #f3f3f3;
+      color: var(--movistar-blue);
+    }
+
+    .side-menu .logout {
+      margin-top: 12px;
+      border-top: 1px solid #eee;
+      padding-top: 8px;
+      color: var(--text-gray);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .content {
+      background: var(--bg-gray);
+      padding: 16px 16px 8px;
+    }
+
+    .action-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .action-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 8px 16px;
+      text-align: center;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 120px;
+    }
+
+    .action-card:active {
+      transform: scale(0.98);
+    }
+
+    .action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-icon.blue {
+      background: var(--movistar-blue);
+    }
+
+    .action-icon.yellow {
+      background: #f5a623;
+    }
+
+    .action-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+    }
+
+    .action-card .title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-black);
+      line-height: 1.15;
+    }
+
+    .action-card .subtitle {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.15;
+      margin-top: -4px;
+    }
+
+    /* ===== MIS FACTURAS ===== */
+    .section {
+      padding: 22px 16px 8px;
+      scroll-margin-top: 8px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-black);
+      margin-bottom: 14px;
+    }
+
+    .invoice-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e0e0e0;
+      padding: 16px;
+    }
+
+    .invoice-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .house-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      color: #222;
+      position: relative;
+    }
+
+    .house-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .house-icon .status-dot {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: #4caf50;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      z-index: 1;
+    }
+
+    .invoice-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .status-pill {
+      display: inline-block;
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 12px;
+      line-height: 1.3;
+    }
+
+    .invoice-info .service {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-black);
+      margin-top: 6px;
+    }
+
+    .invoice-info .note {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-top: 2px;
+    }
+
+    .invoice-amount {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-black);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .btn-outline {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      padding: 12px;
+      border: 1.5px solid var(--movistar-blue);
+      border-radius: 24px;
+      color: var(--movistar-blue);
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      background: transparent;
+    }
+
+    .btn-outline:active {
+      background: rgba(1, 157, 244, 0.08);
+    }
+
+    /* ===== MIS BENEFICIOS ===== */
+    .benefits-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e0e0e0;
+      padding: 16px;
+    }
+
+    .benefit-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .benefit-tab {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-gray);
+      background: #f3f3f3;
+      border: 1.5px solid transparent;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .benefit-tab.active {
+      color: #fff;
+      background: var(--movistar-blue);
+      font-weight: 700;
+    }
+
+    .benefit-panel {
+      display: none;
+    }
+
+    .benefit-panel.active {
+      display: block;
+    }
+
+    .benefit-lead {
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--text-black);
+      margin-bottom: 14px;
+    }
+
+    .benefit-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      object-fit: cover;
+    }
+
+    .benefit-body {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-gray);
+      text-align: left;
+    }
+
+    .benefit-body.centered {
+      text-align: center;
+    }
+
+    /* ===== TIENDA ===== */
+    .store-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .store-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e0e0e0;
+      padding: 16px 8px 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 140px;
+    }
+
+    .store-card:active {
+      transform: scale(0.98);
+    }
+
+    .store-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--movistar-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .store-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: #fff;
+    }
+
+    .store-icon .store-letter {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .store-icon .store-number {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .store-card .title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-black);
+      line-height: 1.15;
+    }
+
+    .store-card .subtitle {
+      font-size: 11px;
+      color: var(--text-gray);
+      line-height: 1.25;
+    }
+
+    .wifi-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wifi-icon svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .wifi-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .wifi-info .network-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-black);
+      line-height: 1.3;
+    }
+
+    .wifi-info .network-status {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      height: calc(var(--nav-height) + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: #fff;
+      border-top: 1px solid #e5e5e5;
+      display: flex;
+      justify-content: space-around;
+      align-items: stretch;
+      z-index: 30;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: #9a9a9a;
+      font-size: 11px;
+      font-weight: 500;
+      position: relative;
+      padding-top: 6px;
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .nav-item.active {
+      color: var(--movistar-blue);
+    }
+
+    .nav-item .badge {
+      position: absolute;
+      top: 6px;
+      right: calc(50% - 18px);
+      width: 8px;
+      height: 8px;
+      background: #e53935;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Side menu -->
+  <div class="menu-backdrop" id="menuBackdrop" aria-hidden="true"></div>
+  <nav class="side-menu" id="sideMenu" aria-label="Menú principal">
+    <h2>Menú</h2>
+    <button type="button" class="menu-link" data-target="inicio">Inicio</button>
+    <button type="button" class="menu-link" data-target="factura">Factura</button>
+    <button type="button" class="menu-link" data-target="beneficios">Beneficios</button>
+    <button type="button" class="menu-link" data-target="tienda">Tienda</button>
+    <button type="button" class="menu-link" data-target="mi-wifi">Mi WiFi</button>
+    <button type="button" class="menu-link logout" id="logoutBtn">Log Out</button>
+  </nav>
+
+  <!-- Hero with banner -->
+  <section class="hero" id="inicio">
+    <img class="hero-banner" src="index_files/banner.jpg" alt="Movistar Total - Disfruta beneficios exclusivos" />
+    <div class="hero-overlay">
+      <div class="top-bar">
+        <button type="button" class="menu-btn" id="menuBtn" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+        <p class="greeting">Hola, Eduardo!</p>
+        <img class="profile" src="index_files/user.png" alt="Eduardo" />
+      </div>
+
+      <div class="plan-selector-wrap" id="planWrap">
+        <button type="button" class="plan-selector" id="planBtn" aria-expanded="false" aria-haspopup="listbox">
+          <svg class="gift-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="10" width="18" height="11" rx="1.5" />
+            <path d="M12 10V21" />
+            <path d="M3 14h18" />
+            <path d="M12 10c-2.2-3.5-5.5-3.2-5.5-1.2S9.2 11 12 10z" />
+            <path d="M12 10c2.2-3.5 5.5-3.2 5.5-1.2S14.8 11 12 10z" />
+            <path d="M3 10h18v-1.5A1.5 1.5 0 0 0 19.5 7H4.5A1.5 1.5 0 0 0 3 8.5V10z" />
+          </svg>
+          <div class="plan-text">
+            <div class="plan-title">Movistar Total</div>
+            <div class="plan-sub">Pospago y Hogar</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        <div class="plan-dropdown" role="listbox" id="planDropdown">
+          <button type="button" class="plan-dropdown-item" role="option">
+            <svg class="gift-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#019df4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="10" width="18" height="11" rx="1.5" />
+              <path d="M12 10V21" />
+              <path d="M3 14h18" />
+              <path d="M12 10c-2.2-3.5-5.5-3.2-5.5-1.2S9.2 11 12 10z" />
+              <path d="M12 10c2.2-3.5 5.5-3.2 5.5-1.2S14.8 11 12 10z" />
+              <path d="M3 10h18v-1.5A1.5 1.5 0 0 0 19.5 7H4.5A1.5 1.5 0 0 0 3 8.5V10z" />
+            </svg>
+            <div class="plan-text">
+              <div class="plan-title">Movistar Total</div>
+              <div class="plan-sub">Pospago y Hogar</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Action cards -->
+  <div class="content">
+    <div class="action-cards">
+      <a class="action-card" href="https://movistar.com.co" target="_blank" rel="noopener noreferrer">
+        <div class="action-icon blue">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16.5 2h-9A2.5 2.5 0 0 0 5 4.5v15A2.5 2.5 0 0 0 7.5 22h9a2.5 2.5 0 0 0 2.5-2.5v-15A2.5 2.5 0 0 0 16.5 2zm-4.5 18a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zM17 17H7V5h10v12z"/>
+          </svg>
+        </div>
+        <span class="title">Compra</span>
+        <span class="subtitle">tu celular</span>
+      </a>
+
+      <a class="action-card" href="https://tuboleta.com" target="_blank" rel="noopener noreferrer">
+        <div class="action-icon yellow">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 7.1-1.01L12 2z"/>
+          </svg>
+        </div>
+        <span class="title">Tuboleta</span>
+        <span class="subtitle">eventos</span>
+      </a>
+
+      <a class="action-card" href="https://movistar.com.co" target="_blank" rel="noopener noreferrer">
+        <div class="action-icon blue">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16.5 1h-9A2.5 2.5 0 0 0 5 3.5v17A2.5 2.5 0 0 0 7.5 23h9a2.5 2.5 0 0 0 2.5-2.5v-17A2.5 2.5 0 0 0 16.5 1zM12 21.25a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2zM17 18H7V4h10v14z"/>
+          </svg>
+        </div>
+        <span class="title">Mejorar</span>
+        <span class="subtitle">mi plan</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Mis facturas -->
+  <section class="section" id="factura">
+    <h2 class="section-title">Mis facturas</h2>
+    <div class="invoice-card">
+      <div class="invoice-row">
+        <div class="house-icon" aria-hidden="true">
+          <span class="status-dot"></span>
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 22 L24 6 L42 22" />
+            <path d="M11 20.5 V40 H37 V20.5" />
+            <path d="M16.5 28.5a10.5 10.5 0 0 1 15 0" />
+            <path d="M19.5 31.8a6 6 0 0 1 9 0" />
+            <circle cx="24" cy="35.5" r="1.6" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <div class="invoice-info">
+          <span class="status-pill">Estás al dia</span>
+          <div class="service">Hogar</div>
+          <div class="note">No tienes pagos pendientes</div>
+        </div>
+        <div class="invoice-amount">$0</div>
+      </div>
+      <a class="btn-outline" href="https://movistar.com.co" target="_blank" rel="noopener noreferrer">Ver detalles</a>
+    </div>
+  </section>
+
+  <!-- Mis beneficios -->
+  <section class="section" id="beneficios">
+    <h2 class="section-title">Mis beneficios</h2>
+    <div class="benefits-card">
+      <div class="benefit-tabs" role="tablist">
+        <button type="button" class="benefit-tab active" role="tab" aria-selected="true" data-tab="arena">Movistar Arena</button>
+        <button type="button" class="benefit-tab" role="tab" aria-selected="false" data-tab="atencion">Atención preferencial</button>
+      </div>
+
+      <div class="benefit-panel active" id="tab-arena" role="tabpanel">
+        <p class="benefit-lead">Por ser <strong>Movistar Total</strong> tienes más accesos a Movistar Arena</p>
+        <img class="benefit-image" src="index_files/movistar.jpg" alt="Movistar Arena" />
+        <p class="benefit-body">Desde conciertos que te dejarán sin aliento hasta eventos deportivos que te mantendrán al borde de tu asiento, en el Movistar Arena vivirás experiencias únicas con Movistar Total</p>
+      </div>
+
+      <div class="benefit-panel" id="tab-atencion" role="tabpanel">
+        <p class="benefit-lead">Recibe atención preferencial en el Call Center</p>
+        <img class="benefit-image" src="index_files/total.png" alt="Atención preferencial Movistar Total" />
+        <p class="benefit-body">Como cliente Movistar Total, pasa de primero a nuestro Call Center y obtén asistencia rápida y eficaz a través del *611. Una vez conectado, selecciona la opción 3-3-2</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tienda -->
+  <section class="section" id="tienda">
+    <h2 class="section-title">Tienda</h2>
+    <div class="store-cards">
+      <a class="store-card" href="https://tienda.movistar.com.co" target="_blank" rel="noopener noreferrer">
+        <div class="store-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M16.5 2h-9A2.5 2.5 0 0 0 5 4.5v15A2.5 2.5 0 0 0 7.5 22h9a2.5 2.5 0 0 0 2.5-2.5v-15A2.5 2.5 0 0 0 16.5 2zm-4.5 18a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zM17 17H7V5h10v12z"/>
+          </svg>
+        </div>
+        <span class="title">Pymes</span>
+        <span class="subtitle">Fibra estable y red móvil</span>
+      </a>
+
+      <a class="store-card" href="https://tienda.movistar.com.co" target="_blank" rel="noopener noreferrer">
+        <div class="store-icon" aria-hidden="true">
+          <span class="store-number">900</span>
+        </div>
+        <span class="title">900 Megas</span>
+        <span class="subtitle">Hasta 900 megas de fibra</span>
+      </a>
+
+      <a class="store-card" href="https://tienda.movistar.com.co" target="_blank" rel="noopener noreferrer">
+        <div class="store-icon" aria-hidden="true">
+          <span class="store-letter">M</span>
+        </div>
+        <span class="title">Empresas</span>
+        <span class="subtitle">Conoce nuestras opciones empresariales</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Mi WiFi -->
+  <section class="section" id="mi-wifi">
+    <h2 class="section-title">Mi WiFi</h2>
+    <div class="invoice-card">
+      <div class="invoice-row">
+        <div class="wifi-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5.07 11.07a10 10 0 0 1 13.86 0" />
+            <path d="M8.53 14.53a5 5 0 0 1 6.94 0" />
+            <circle cx="12" cy="18" r="1.4" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <div class="wifi-info">
+          <div class="network-name">Red: movis_apto_2.4G</div>
+          <div class="network-status">Tu red está activa y funcionando correctamente</div>
+        </div>
+      </div>
+      <a class="btn-outline" href="https://tienda.movistar.com.co" target="_blank" rel="noopener noreferrer">Mejorar mi plan</a>
+    </div>
+  </section>
+
+  <!-- Bottom navigation -->
+  <nav class="bottom-nav" aria-label="Navegación inferior">
+    <button type="button" class="nav-item active" data-target="inicio" aria-label="Inicio">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.2 3.5 11h2.7v9h4.2v-6h3.2v6h4.2v-9h2.7L12 3.2z"/></svg>
+      <span>Inicio</span>
+    </button>
+    <button type="button" class="nav-item" data-target="factura" aria-label="Factura">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/>
+        <path d="M14 3v4h4"/>
+        <path d="M10 11v7"/>
+        <path d="M10 11h1.4c.9 0 1.6.6 1.6 1.4S12.3 14 11.4 14H10"/>
+        <path d="M10 14h1.5c1 0 1.7.6 1.7 1.5S12.5 17 11.5 17H10"/>
+      </svg>
+      <span>Factura</span>
+    </button>
+    <button type="button" class="nav-item" data-target="beneficios" aria-label="Beneficios">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 7h-2.18A3 3 0 0 0 15 4c-1.2 0-2.2.65-2.7 1.6A3 3 0 0 0 9.6 4 3 3 0 0 0 6.18 7H4a2 2 0 0 0-2 2v2h20V9a2 2 0 0 0-2-2zM9.6 5.5c.83 0 1.5.67 1.5 1.5H8.1c0-.83.67-1.5 1.5-1.5zm5.4 0c.83 0 1.5.67 1.5 1.5h-3c0-.83.67-1.5 1.5-1.5zM2 13v6a2 2 0 0 0 2 2h7v-8H2zm11 8h7a2 2 0 0 0 2-2v-6h-9v8z"/></svg>
+      <span>Beneficios</span>
+    </button>
+    <button type="button" class="nav-item" data-target="tienda" aria-label="Tienda">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7.16 14h9.45a1.8 1.8 0 0 0 1.74-1.34L21 4.5H5.21L4.27 2H1v2h2l3.6 7.59-1.35 2.45A1.75 1.75 0 0 0 6.8 16H19v-2H7.42l.74-1.35.01-.01.99-1.64z"/></svg>
+      <span>Tienda</span>
+    </button>
+    <button type="button" class="nav-item" data-target="mi-wifi" aria-label="Mi WiFi">
+      <span class="badge" aria-hidden="true"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5.07 11.07a10 10 0 0 1 13.86 0" />
+        <path d="M8.53 14.53a5 5 0 0 1 6.94 0" />
+        <circle cx="12" cy="18" r="1.4" fill="currentColor" stroke="none" />
+      </svg>
+      <span>Mi WiFi</span>
+    </button>
+  </nav>
+
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const sideMenu = document.getElementById("sideMenu");
+    const menuBackdrop = document.getElementById("menuBackdrop");
+    const planWrap = document.getElementById("planWrap");
+    const planBtn = document.getElementById("planBtn");
+    const navItems = document.querySelectorAll(".nav-item");
+    const menuLinks = document.querySelectorAll(".side-menu .menu-link[data-target]");
+
+    function openMenu() {
+      sideMenu.classList.add("open");
+      menuBackdrop.classList.add("show");
+    }
+
+    function closeMenu() {
+      sideMenu.classList.remove("open");
+      menuBackdrop.classList.remove("show");
+    }
+
+    function setActiveNav(targetId) {
+      navItems.forEach((item) => {
+        item.classList.toggle("active", item.dataset.target === targetId);
+      });
+    }
+
+    function scrollToSection(targetId) {
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      setActiveNav(targetId);
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    menuBtn.addEventListener("click", openMenu);
+    menuBackdrop.addEventListener("click", closeMenu);
+
+    menuLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+        scrollToSection(link.dataset.target);
+      });
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      closeMenu();
+    });
+
+    planBtn.addEventListener("click", () => {
+      const open = planWrap.classList.toggle("open");
+      planBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    document.querySelector(".plan-dropdown-item").addEventListener("click", () => {
+      planWrap.classList.remove("open");
+      planBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!planWrap.contains(e.target)) {
+        planWrap.classList.remove("open");
+        planBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    navItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        scrollToSection(item.dataset.target);
+      });
+    });
+
+    // Beneficios tabs
+    const benefitTabs = document.querySelectorAll(".benefit-tab");
+    benefitTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+        benefitTabs.forEach((t) => {
+          const active = t === tab;
+          t.classList.toggle("active", active);
+          t.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        document.querySelectorAll(".benefit-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.id === `tab-${target}`);
+        });
+      });
+    });
+
+    // Highlight nav while scrolling
+    const sectionIds = ["inicio", "factura", "beneficios", "tienda", "mi-wifi"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveNav(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  </script>
+</body>
+</html>
